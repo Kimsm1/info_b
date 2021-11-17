@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezen.myapp.persistence.NoteService_Mapper">
+<insert id="noteSend" parameterType="HashMap">
+insert into note(no, send_nick, recv_nick, content)
+values(no_seq.nextval, #{send_nick}, #{recv_nick},#{content})
+</insert>
+    
+<select id="noteListRecv" resultType="nv" parameterType="String">
+<![CDATA[select B.rnum, no, send_nick, recv_nick, content, to_char(send_time, 'YYYY-MM-DD HH24:MI') send_time from  
+(select rownum as rnum, A.* from 
+	(select * from note where Ndelyn='N'
+order by no desc ) A  
+where rownum <= 15) B 
+where B.rnum >=1
+]]>
+</select>
+
+<select id="noteListSend" resultType="nv" parameterType="String">
+<![CDATA[select B.rnum, no, send_nick, recv_nick, content, to_char(send_time, 'YYYY-MM-DD HH24:MI') send_time from  
+(select rownum as rnum, A.* from 
+	(select * from note where Ndelyn='N'
+order by no desc ) A  
+where rownum <= 15) B 
+where B.rnum >=1
+]]>
+</select>
+
+<update id="noteDelete" parameterType="Integer">
+update note set ndelYn='Y' where no=#{no}
+</update>
+
+<select id="noteSelectOne" parameterType="Integer" resultType="nv">
+select * from note where ndelyn='N' and no = #{no}
+</select>
+
+<select id="noteTotalCount" parameterType="String" resultType="Integer">
+select count(*) as cnt from note where NdelYn='N'and send_nick = #{send_nick}
+				
+</select>
+
+<select id="noteTotalCount2" parameterType="String" resultType="Integer">
+select count(*) as cnt from note where NdelYn='N'and recv_nick = #{recv_nick}
+				
+</select>
+
+<select id="noteSelectAll" parameterType="scri" resultType="nv">
+select B.rnum,B.* from  
+(select rownum as rnum, A.* from 
+	(select * from note where Ndelyn='N'	
+<![CDATA[	order by no desc ) A  
+where rownum <= #{page}*#{perPageNum}) B 
+where B.rnum >=(#{page}-1)*#{perPageNum}+1
+]]>
+</select>
+
+</mapper>
