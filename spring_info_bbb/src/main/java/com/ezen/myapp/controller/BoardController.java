@@ -192,6 +192,7 @@ public class BoardController  {
 	public String boardDelete(
 			@ModelAttribute("bidx") int bidx,Model model) {
 		
+		//boardService占쏙옙 占쌍댐옙 占쌨소듸옙 호占쏙옙
 		BoardVo bv = bs.boardSelectOne(bidx);
 		model.addAttribute("bv", bv);		
 		
